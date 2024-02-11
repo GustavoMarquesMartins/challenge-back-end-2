@@ -46,7 +46,6 @@ class ReceitaValidatorsTestCase(APITestCase):
 
     Receita.objects.create(
         descricao='Receita com menos de 30 dias criada',
-        data=data_atual,
         valor=12.00
     )
 
