@@ -1,27 +1,34 @@
 from rest_framework import serializers
-
-from .models import Receita
+from .models import *
 from .validators import *
 
-class ReceitaSerializer(serializers.ModelSerializer):
-    """Serializer para a model Receita"""
+class BaseTransacaoSerializer(serializers.ModelSerializer):
+    """Base para ReceitaSerializer e DespesaSerializer."""
 
-    # Utiliza um campo especial para personalizar a representação do valor do campo
-    data_formatada = serializers.SerializerMethodField(method_name='get_data_formatada')
-    
-    class Meta:
-        """Configurações do serializer"""
-        model = Receita
-        fields = ['descricao', 'valor', 'data_formatada']
-    
+    data = serializers.SerializerMethodField(method_name='get_data_formatada')
+
     def get_data_formatada(self, obj):
-        """
-        Retorna o atributo 'data' formatado como uma string no formato 'dd/mm/aaaa'.
-        :param obj: A instância da model Receita.
-        """
+        """Retorna 'data' formatada como 'dd/mm/aaaa : HH:MM'."""
         return obj.data.strftime('%d/%m/%Y : %H:%M')
-    
+
     def validate(self, data):
-        if not descricao_valida(data['descricao']):
-            raise serializers.ValidationError({'descricao': 'Uma descrição não pode ter nome duplicado durante 1 mês'})
+        """Garante que a descrição não seja duplicada durante 1 mês."""
+        if not descricao_valida(self.Meta.model, data['descricao']):
+            raise serializers.ValidationError({'descricao': 'Descrição não pode ser duplicada por 1 mês'})
         return data
+
+class ReceitaSerializer(BaseTransacaoSerializer):
+    """Serializer para Receita."""
+
+    class Meta:
+        """Configurações do serializer."""
+        model = Receita
+        fields = ['descricao', 'valor', 'data']
+
+class DespesaSerializer(BaseTransacaoSerializer):
+    """Serializer para Despesa."""
+
+    class Meta:
+        """Configurações do serializer."""
+        model = Despesa
+        fields = ['descricao', 'valor', 'data']
