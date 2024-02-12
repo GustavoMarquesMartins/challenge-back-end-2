@@ -33,14 +33,6 @@ class DespesaSerializer(BaseTransacaoSerializer):
         model = Despesa
         fields = ['descricao', 'valor', 'data']
 
-class ReceitaSerializerV2(BaseTransacaoSerializer):
-    """Serializer para Receita."""
-
-    class Meta:
-        """Configurações do serializer."""
-        model = Receita
-        fields = ['descricao', 'valor', 'data','categoria']
-
 class DespesaSerializerV2(BaseTransacaoSerializer):
     """Serializer para Despesa."""
 
