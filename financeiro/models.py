@@ -1,6 +1,5 @@
 from django.db import models
-from datetime import datetime
-
+from django.utils import timezone
 
 class Receita(models.Model):
     """
@@ -8,7 +7,7 @@ class Receita(models.Model):
     """
     descricao = models.CharField(max_length=50, blank=False, null=False)
     valor = models.DecimalField(max_digits=8, decimal_places=2, null=False)
-    data = models.DateTimeField(default=datetime.now, null=False, blank=False)
+    data = models.DateTimeField(default=timezone.now, null=False, blank=False)
 
     def __str__(self):
         """Retorna uma representação em string da descrição do objeto"""
@@ -20,7 +19,7 @@ class Despesa(models.Model):
     """
     descricao = models.CharField(max_length=50, blank=False, null=False)
     valor = models.DecimalField(max_digits=8, decimal_places=2, null=False)
-    data = models.DateTimeField(default=datetime.now, null=False, blank=False)
+    data = models.DateTimeField(default=timezone.now, null=False, blank=False)
 
     def __str__(self):
         """Retorna uma representação em string da descrição do objeto"""

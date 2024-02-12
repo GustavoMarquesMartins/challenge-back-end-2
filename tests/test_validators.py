@@ -35,7 +35,7 @@ class ReceitaValidatorsTestCase(APITestCase):
 
   def cenario_de_teste(self): 
     """Cria uma instância de Receita no banco de dados."""
-    data_atual = datetime.now()
+    data_atual = datetime.now(tz=pytz.timezone('America/Sao_Paulo'))
     data_30_dias_atras = data_atual - timedelta(days=30)
     
     Receita.objects.create(

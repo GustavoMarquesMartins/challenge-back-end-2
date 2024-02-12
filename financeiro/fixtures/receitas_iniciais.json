@@ -4,26 +4,23 @@
     "pk":  1,
     "fields": {
       "descricao": "Venda de um celular",
-      "valor":  1000.00,
-      "data": "2016-07-15"
+      "valor":  1000.00
     }
   },
   {
     "model": "financeiro.receita",
     "pk":  2,
     "fields": {
-      "descricao": "Aluguel de imóvel",
-      "valor":  1500.00,
-      "data": "2016-08-15"
+      "descricao": "Aluguel de imovel",
+      "valor":  1500.00
     }
   },
   {
     "model": "financeiro.receita",
     "pk":  3,
     "fields": {
-      "descricao": "Venda de um sofá",
-      "valor":  2000.00,
-      "data": "2016-09-15"
+      "descricao": "Venda de um sofa",
+      "valor":  2000.00
     }
   },
   {
@@ -31,8 +28,7 @@
     "pk":  4,
     "fields": {
       "descricao": "Serviço de reparo de computador",
-      "valor":  3000.00,
-      "data": "2016-10-15"
+      "valor":  3000.00
     }
   },
   {
@@ -40,8 +36,7 @@
     "pk":  5,
     "fields": {
       "descricao": "Venda de um console de jogos",
-      "valor":  2500.00,
-      "data": "2016-11-15"
+      "valor":  2500.00
     }
   },
   {
@@ -49,8 +44,7 @@
     "pk":  6,
     "fields": {
       "descricao": "Locação de equipamentos de som",
-      "valor":  1800.00,
-      "data": "2016-12-15"
+      "valor":  1800.00
     }
   },
   {
@@ -58,8 +52,7 @@
     "pk":  7,
     "fields": {
       "descricao": "Venda de um rel\ufffdgio de p\ufffdso",
-      "valor":  500.00,
-      "data": "2017-01-15"
+      "valor":  500.00
     }
   },
   {
@@ -67,8 +60,7 @@
     "pk":  8,
     "fields": {
       "descricao": "Serviço de limpeza de janelas",
-      "valor":  1200.00,
-      "data": "2017-02-15"
+      "valor":  1200.00
     }
   },
   {
@@ -76,8 +68,7 @@
     "pk":  9,
     "fields": {
       "descricao": "Venda de um televisor",
-      "valor":  3500.00,
-      "data": "2017-03-15"
+      "valor":  3500.00
     }
   },
   {
@@ -85,8 +76,7 @@
     "pk":  10,
     "fields": {
       "descricao": "Serviço de instala\ufffd\ufffdo de internet",
-      "valor":  2200.00,
-      "data": "2017-04-15"
+      "valor":  2200.00
     }
   },
   {
@@ -94,8 +84,7 @@
     "pk":  11,
     "fields": {
       "descricao": "Venda de um geladeira",
-      "valor":  4000.00,
-      "data": "2017-05-15"
+      "valor":  4000.00
     }
   },
   {
@@ -103,8 +92,7 @@
     "pk":  12,
     "fields": {
       "descricao": "Serviço de conserto de fog\ufffdo",
-      "valor":  1900.00,
-      "data": "2017-06-15"
+      "valor":  1900.00
     }
   },
   {
@@ -112,8 +100,7 @@
     "pk":  13,
     "fields": {
       "descricao": "Venda de um freezer",
-      "valor":  3800.00,
-      "data": "2017-07-15"
+      "valor":  3800.00
     }
   },
   {
@@ -121,8 +108,7 @@
     "pk":  14,
     "fields": {
       "descricao": "Serviço de pintura de casa",
-      "valor":  2100.00,
-      "data": "2017-08-15"
+      "valor":  2100.00
     }
   },
   {
@@ -130,8 +116,7 @@
     "pk":  15,
     "fields": {
       "descricao": "Venda de um microondas",
-      "valor":  2300.00,
-      "data": "2017-09-15"
+      "valor":  2300.00
     }
   },
   {
@@ -139,8 +124,7 @@
     "pk":  16,
     "fields": {
       "descricao": "Serviço de instala\ufffd\ufffdo de aquecimento",
-      "valor":  2400.00,
-      "data": "2017-10-15"
+      "valor":  2400.00
     }
   },
   {
@@ -148,8 +132,7 @@
     "pk":  17,
     "fields": {
       "descricao": "Venda de um forno",
-      "valor":  3200.00,
-      "data": "2017-11-15"
+      "valor":  3200.00
     }
   }
 ]
