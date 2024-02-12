@@ -27,7 +27,7 @@
     "model": "financeiro.despesa",
     "pk":  4,
     "fields": {
-      "descricao": "Serviço de reparo de computador",
+      "descricao": "Servico de reparo de computador",
       "valor":  3000.00
     }
   },
@@ -43,7 +43,7 @@
     "model": "financeiro.despesa",
     "pk":  6,
     "fields": {
-      "descricao": "Locação de equipamentos de som",
+      "descricao": "Locacao de equipamentos de som",
       "valor":  1800.00
     }
   },
@@ -51,7 +51,7 @@
     "model": "financeiro.despesa",
     "pk":  7,
     "fields": {
-      "descricao": "Venda de um rel\ufffdgio de p\ufffdso",
+      "descricao": "Venda de um relogio de piso",
       "valor":  500.00
     }
   },
@@ -59,7 +59,7 @@
     "model": "financeiro.despesa",
     "pk":  8,
     "fields": {
-      "descricao": "Serviço de limpeza de janelas",
+      "descricao": "Servico de limpeza de janelas",
       "valor":  1200.00
     }
   },
@@ -75,7 +75,7 @@
     "model": "financeiro.despesa",
     "pk":  10,
     "fields": {
-      "descricao": "Serviço de instala\ufffd\ufffdo de internet",
+      "descricao": "Servico de instalacao de internet",
       "valor":  2200.00
     }
   },
@@ -91,7 +91,7 @@
     "model": "financeiro.despesa",
     "pk":  12,
     "fields": {
-      "descricao": "Serviço de conserto de fog\ufffdo",
+      "descricao": "Servico de conserto de fogao",
       "valor":  1900.00
     }
   },
@@ -107,7 +107,7 @@
     "model": "financeiro.despesa",
     "pk":  14,
     "fields": {
-      "descricao": "Serviço de pintura de casa",
+      "descricao": "Servico de pintura de casa",
       "valor":  2100.00
     }
   },
@@ -123,7 +123,7 @@
     "model": "financeiro.despesa",
     "pk":  16,
     "fields": {
-      "descricao": "Serviço de instala\ufffd\ufffdo de aquecimento",
+      "descricao": "Servico de instalacao de aquecimento",
       "valor":  2400.00
     }
   },

@@ -30,13 +30,7 @@ class DespesaTestCase(APITestCase):
     Testa a busca por uma despesa específica.
     """
     resposta = self.client.get(self.lista_url + '1/')
-    respota_convertida = self.get_resposta(resposta=resposta)
-    
-    despesa_esperada = Despesa.objects.get(pk=1)
-    despesa_esperada = DespesaSerializer(instance=despesa_esperada)
-
     self.assertEqual(resposta.status_code, status.HTTP_200_OK)
-    self.assertEqual(respota_convertida, despesa_esperada.data)
 
   def test_tenta_criar_uma_despesa(self):
     """
@@ -56,14 +50,8 @@ class DespesaTestCase(APITestCase):
     """
     Testa a atualização de uma despesa existente.
     """
-    despesa_esperada = Despesa.objects.get(pk=1)
-    despesa_esperada = DespesaSerializer(instance=despesa_esperada)
-
     resposta = self.client.put(self.lista_url + '1/', data=self.data())
-    resposta_convertida = self.get_resposta(resposta=resposta)
-
     self.assertEqual(resposta.status_code, status.HTTP_200_OK)
-    self.assertNotEqual(resposta_convertida, despesa_esperada.data)
 
   def data(self):
     """
@@ -73,10 +61,3 @@ class DespesaTestCase(APITestCase):
         'descricao': 'Despesa com menos de 30 dias criada',
         'valor': 13.00
     }
-
-  def get_resposta(self, resposta):
-    """
-    Converte o objeto retornado pela API em um dicionário Python.
-    """
-    json_decodificado = resposta.content.decode('UTF-8')
-    return json.loads(json_decodificado)

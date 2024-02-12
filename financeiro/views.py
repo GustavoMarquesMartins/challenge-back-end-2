@@ -1,8 +1,6 @@
-from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
-from django.urls import reverse 
 import re
 
 from .models import *
@@ -11,16 +9,16 @@ from .serializers import *
 class BaseViewSet(viewsets.ModelViewSet):
 
   def get_serializer_class(self, serializers, versao):
-    """Verifica se a versão passada existe. Se ela existe, é retornado o serializador. Caso contrário, é retornado o serializer mais recente"""
-    versao_mais_recente = serializers[-1] 
+    """Verifica se a versão passada existe. Se ela existe, é retornado o serializador. Caso contrário, é retornado o serializer de versão inicial"""
+    versao_inicial = serializers[-1] 
     if versao:
       versao_solicitade_existe = int(versao) in range(1, len(serializers) + 1)
       if not versao_solicitade_existe:
-          return versao_mais_recente
+          return versao_inicial
       versao_solicitada = serializers[int(versao) - 1]
       return versao_solicitada
     else:
-       return versao_mais_recente
+       return versao_inicial
 
   def custom_create(self, request, serializer_class):
     """Quando uma instância é criada no banco de dados, o cabeçalho 'location' é retornado"""
@@ -36,8 +34,8 @@ class BaseViewSet(viewsets.ModelViewSet):
     """Gera a URL para o campo location"""
     regex = r'\?'
     resultado = re.search(regex, url)
-    indice = resultado.start()
     if resultado:
+      indice = resultado.start()
       return url[:indice] 
     else: 
        return url
