@@ -7,9 +7,19 @@ from .serializers import *
 class ReceitaViewSet(viewsets.ModelViewSet):
   """Método que cria os endpoints para o modelo(Receita)"""
   queryset = Receita.objects.all()
-  serializer_class = ReceitaSerializer
+
+  def get_serializer_class(self):
+    if self.request.version == 'v2':
+      return ReceitaSerializerV2
+    else:
+      return ReceitaSerializer
   
 class DespesaViewSet(viewsets.ModelViewSet):
   """Método que cria os endpoints para o modelo(Despesa)"""
   queryset = Despesa.objects.all()
-  serializer_class = DespesaSerializer
+
+  def get_serializer_class(self):
+    if self.request.version == 'v2':
+      return DespesaSerializerV2
+    else:
+      return ReceitaSerializer
