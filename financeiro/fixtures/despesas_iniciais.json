@@ -1,0 +1,138 @@
+[
+  {
+    "model": "financeiro.despesa",
+    "pk":  1,
+    "fields": {
+      "descricao": "Venda de um celular",
+      "valor":  1000.00
+    }
+  },
+  {
+    "model": "financeiro.despesa",
+    "pk":  2,
+    "fields": {
+      "descricao": "Aluguel de imovel",
+      "valor":  1500.00
+    }
+  },
+  {
+    "model": "financeiro.despesa",
+    "pk":  3,
+    "fields": {
+      "descricao": "Venda de um sofa",
+      "valor":  2000.00
+    }
+  },
+  {
+    "model": "financeiro.despesa",
+    "pk":  4,
+    "fields": {
+      "descricao": "Serviço de reparo de computador",
+      "valor":  3000.00
+    }
+  },
+  {
+    "model": "financeiro.despesa",
+    "pk":  5,
+    "fields": {
+      "descricao": "Venda de um console de jogos",
+      "valor":  2500.00
+    }
+  },
+  {
+    "model": "financeiro.despesa",
+    "pk":  6,
+    "fields": {
+      "descricao": "Locação de equipamentos de som",
+      "valor":  1800.00
+    }
+  },
+  {
+    "model": "financeiro.despesa",
+    "pk":  7,
+    "fields": {
+      "descricao": "Venda de um rel\ufffdgio de p\ufffdso",
+      "valor":  500.00
+    }
+  },
+  {
+    "model": "financeiro.despesa",
+    "pk":  8,
+    "fields": {
+      "descricao": "Serviço de limpeza de janelas",
+      "valor":  1200.00
+    }
+  },
+  {
+    "model": "financeiro.despesa",
+    "pk":  9,
+    "fields": {
+      "descricao": "Venda de um televisor",
+      "valor":  3500.00
+    }
+  },
+  {
+    "model": "financeiro.despesa",
+    "pk":  10,
+    "fields": {
+      "descricao": "Serviço de instala\ufffd\ufffdo de internet",
+      "valor":  2200.00
+    }
+  },
+  {
+    "model": "financeiro.despesa",
+    "pk":  11,
+    "fields": {
+      "descricao": "Venda de um geladeira",
+      "valor":  4000.00
+    }
+  },
+  {
+    "model": "financeiro.despesa",
+    "pk":  12,
+    "fields": {
+      "descricao": "Serviço de conserto de fog\ufffdo",
+      "valor":  1900.00
+    }
+  },
+  {
+    "model": "financeiro.despesa",
+    "pk":  13,
+    "fields": {
+      "descricao": "Venda de um freezer",
+      "valor":  3800.00
+    }
+  },
+  {
+    "model": "financeiro.despesa",
+    "pk":  14,
+    "fields": {
+      "descricao": "Serviço de pintura de casa",
+      "valor":  2100.00
+    }
+  },
+  {
+    "model": "financeiro.despesa",
+    "pk":  15,
+    "fields": {
+      "descricao": "Venda de um microondas",
+      "valor":  2300.00
+    }
+  },
+  {
+    "model": "financeiro.despesa",
+    "pk":  16,
+    "fields": {
+      "descricao": "Serviço de instala\ufffd\ufffdo de aquecimento",
+      "valor":  2400.00
+    }
+  },
+  {
+    "model": "financeiro.despesa",
+    "pk":  17,
+    "fields": {
+      "descricao": "Venda de um forno",
+      "valor":  3200.00
+    }
+  }
+]
