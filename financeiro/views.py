@@ -11,7 +11,7 @@ from .serializers import *
 class BaseViewSet(viewsets.ModelViewSet):
 
   def get_serializer_class(self, serializers, versao):
-    """Verifica se a versao passada existe se ela existe e retornada o serializador se nao, e retornado a o serializer mais recente"""
+    """Verifica se a versão passada existe. Se ela existe, é retornado o serializador. Caso contrário, é retornado o serializer mais recente"""
     versao_mais_recente = serializers[-1] 
     if versao:
       versao_solicitade_existe = int(versao) in range(1, len(serializers) + 1)
@@ -23,7 +23,7 @@ class BaseViewSet(viewsets.ModelViewSet):
        return versao_mais_recente
 
   def custom_create(self, request, serializer_class):
-    """Quando e criado uma instancia no banco de dados e retornada o cabecalho location"""
+    """Quando uma instância é criada no banco de dados, o cabeçalho 'location' é retornado"""
     serializer = serializer_class(data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -33,7 +33,7 @@ class BaseViewSet(viewsets.ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
   def url_location(self, url):
-    """Gera a url para o campo location"""
+    """Gera a URL para o campo location"""
     regex = r'\?'
     resultado = re.search(regex, url)
     indice = resultado.start()
@@ -50,10 +50,12 @@ class ReceitaViewSet(BaseViewSet):
   lista_serializers = [ReceitaSerializer]
 
   def get_serializer_class(self):
+    """Define qual a classe serializer"""
     self.serializer_class = super().get_serializer_class(serializers=self.lista_serializers, versao=self.request.version)
     return self.serializer_class
   
   def create(self, request):
+    """Sobrescreve o método create para retornar o status code 201 e o campo location"""
     return self.custom_create(request=request, serializer_class=self.get_serializer_class())
 
 class DespesaViewSet(BaseViewSet):
@@ -64,7 +66,9 @@ class DespesaViewSet(BaseViewSet):
   lista_serializers = [DespesaSerializer, DespesaSerializerV2]
 
   def get_serializer_class(self):
-      return super().get_serializer_class(serializers=self.lista_serializers, versao=self.request.version)
+    """Define qual a classe serializer"""
+    return super().get_serializer_class(serializers=self.lista_serializers, versao=self.request.version)
 
   def create(self, request):
+    """Sobrescreve o método create para retornar o status code 201 e o campo location"""
     return self.custom_create(request=request, serializer_class=self.get_serializer_class())
