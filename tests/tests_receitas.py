@@ -37,7 +37,10 @@ class ReceitaTestCase(APITestCase):
     Testa a criação de uma nova receita.
     """
     resposta = self.client.post(self.lista_url, self.data())
+    url_da_requisicao = resposta.wsgi_request.build_absolute_uri()
+
     self.assertEqual(resposta.status_code, status.HTTP_201_CREATED)
+    self.assertEqual(resposta['location'], url_da_requisicao + str(resposta.data['id']))
 
   def test_tenta_deletar_uma_receita(self):
     """
