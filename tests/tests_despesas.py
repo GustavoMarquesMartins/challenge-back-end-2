@@ -55,6 +55,15 @@ class DespesaTestCase(APITestCase):
     """
     resposta = self.client.put(self.lista_url + '1/', data=self.data())
     self.assertEqual(resposta.status_code, status.HTTP_200_OK)
+  
+  def test_faz_uma_requisicao_com_o_parametro_descricao(self):
+    """Quando passada uma URL com o parâmetro 'descricao', deve ser retornada apenas a despesas que atenda a esse parâmetro de pesquisa."""
+    descricao = 'Venda de um celular'
+    resposta = self.client.get(self.lista_url + f'?descricao={descricao}')
+    resposta_dict = resposta.data
+    
+    for resposta in resposta_dict:
+      self.assertEqual(resposta['descricao'], descricao)
 
   def data(self):
     """
