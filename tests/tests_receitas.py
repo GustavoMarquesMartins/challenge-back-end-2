@@ -64,3 +64,4 @@ class ReceitaTestCase(APITestCase):
         'descricao': 'Receita com menos de 30 dias criada',
         'valor': 13.00
     }
+

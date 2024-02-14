@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
 import re
+from django.shortcuts import get_object_or_404
 
 from .models import *
 from .serializers import *
@@ -10,9 +11,9 @@ class BaseViewSet(viewsets.ModelViewSet):
 
   def get_serializer_class(self, serializers, versao):
     """Verifica se a versão passada existe. Se ela existe, é retornado o serializador. Caso contrário, é retornado o serializer de versão inicial"""
-    versao_inicial = serializers[-1] 
+    versao_inicial = serializers[0] 
     if versao:
-      versao_solicitade_existe = int(versao) in range(1, len(serializers) + 1)
+      versao_solicitade_existe = int(versao) in range(1, len(serializers) + 1) 
       if not versao_solicitade_existe:
           return versao_inicial
       versao_solicitada = serializers[int(versao) - 1]
@@ -39,6 +40,17 @@ class BaseViewSet(viewsets.ModelViewSet):
       return url[:indice] 
     else: 
        return url
+  
+  def get_queryset(self):
+    """Define qual vai ser o queryset usado para realizar a busca no banco de dados"""
+    parametro = self.request.query_params.get('descricao', None)
+    if parametro:
+        # Filtra as receitas pela descrição
+        self.queryset = self.queryset.model.objects.filter(descricao=parametro)
+        return self.queryset
+    else:
+        # Retorna todas as receitas se nenhum parâmetro de descrição for fornecido
+        return self.queryset
 
 class ReceitaViewSet(BaseViewSet):
   """
@@ -55,7 +67,7 @@ class ReceitaViewSet(BaseViewSet):
   def create(self, request):
     """Sobrescreve o método create para retornar o status code 201 e o campo location"""
     return self.custom_create(request=request, serializer_class=self.get_serializer_class())
-
+  
 class DespesaViewSet(BaseViewSet):
   """
   ViewSet para o modelo Despesa.
@@ -70,3 +82,4 @@ class DespesaViewSet(BaseViewSet):
   def create(self, request):
     """Sobrescreve o método create para retornar o status code 201 e o campo location"""
     return self.custom_create(request=request, serializer_class=self.get_serializer_class())
+  
