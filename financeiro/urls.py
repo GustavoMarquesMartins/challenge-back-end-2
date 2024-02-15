@@ -14,4 +14,5 @@ router.register('despesas', DespesaViewSet, basename='despesas')
 urlpatterns = [
     # Inclui as URLs geradas pelo roteador
     path('', include(router.urls)),
+    path('receitas/<int:mes>/<int:ano>/', ReceitaListView.as_view(), name='receitas_por_ano_mes'),
 ]
