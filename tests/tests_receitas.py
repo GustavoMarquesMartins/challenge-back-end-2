@@ -68,7 +68,7 @@ class ReceitaAPITestCase(APITestCase):
         'valor': 13.00
     }
 
-class RecetaTestCase(TestCase):
+class ReceitaTestCase(TestCase):
 
   fixtures = ['receitas_iniciais']
 

@@ -146,6 +146,34 @@ class ReceitaListView(BaseView, generics.ListAPIView):
         )
     return self.queryset
 
+class DespesaListView(BaseView, generics.ListAPIView):
+  """
+  View para listar despesas com base no mês e ano solicitados.
+  """
+  queryset = Despesa.objects.all()
+
+  def get_serializer_class(self):
+    """
+    Define a classe do serializador com base na versão da API.
+    """
+    return super().get_serializer_class(serializers=get_list_serializers(self.queryset.model),
+                                        versao=self.request.version)
+  
+  def get_queryset(self):
+    """
+    Retorna despesas com base no mês e ano solicitados, caso existam.
+    Caso contrário, retorna uma lista vazia.
+    """
+    mes = self.kwargs.get('mes')
+    ano = self.kwargs.get('ano')
+
+    if mes and ano:
+      return Despesa.objects.filter(
+          data__month=mes,
+          data__year=ano
+        )
+    return self.queryset
+
 def get_list_serializers(model):
    """Retorna a lista de serializers de acordo com o modelo passado"""
    if model:
