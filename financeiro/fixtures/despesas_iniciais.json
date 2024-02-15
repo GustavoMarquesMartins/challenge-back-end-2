@@ -4,7 +4,8 @@
     "pk":  1,
     "fields": {
       "descricao": "Venda de um celular",
-      "valor":  1000.00
+      "valor":  1000.00,
+      "data" : "2024-02-12"
     }
   },
   {

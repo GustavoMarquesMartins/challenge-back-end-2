@@ -1,14 +1,17 @@
 from rest_framework.test import APITestCase
+from django.test import TestCase
+
 from django.urls import reverse
 from rest_framework import status
-from financeiro.models import Receita
-from financeiro.serializers import ReceitaSerializer
 import json
 from datetime import datetime, timedelta
 import pytz
+from django.utils import timezone
 
+from financeiro.models import Receita
+from financeiro.serializers import ReceitaSerializer
 
-class ReceitaTestCase(APITestCase):
+class ReceitaAPITestCase(APITestCase):
 
   fixtures = ['receitas_iniciais']
 
@@ -56,15 +59,6 @@ class ReceitaTestCase(APITestCase):
     resposta = self.client.put(self.lista_url + '1/', data=self.data())
     self.assertEqual(resposta.status_code, status.HTTP_200_OK)
 
-  def test_faz_uma_requisicao_com_o_parametro_descricao(self):
-    """Quando passada uma URL com o parâmetro 'descricao', deve ser retornada apenas a receitas que atenda a esse parâmetro de pesquisa."""
-    descricao = 'Venda de um celular'
-    resposta = self.client.get(self.lista_url + f'?descricao={descricao}')
-    resposta_dict = resposta.data
-    
-    for resposta in resposta_dict:
-      self.assertEqual(resposta['descricao'], descricao)
-
   def data(self):
     """
     Retorna um dicionário com os dados a serem enviados na requisição POST.
@@ -73,4 +67,49 @@ class ReceitaTestCase(APITestCase):
         'descricao': 'Receita com menos de 30 dias criada',
         'valor': 13.00
     }
+
+class RecetaTestCase(TestCase):
+
+  fixtures = ['receitas_iniciais']
+
+  def setUp(self):
+    """
+    Configuração inicial antes de cada teste.
+    """
+    self.lista_url = reverse('receitas-list')
+    self.gerar_instancia()
+
+  def test_faz_uma_requisicao_com_o_parametro_descricao(self):
+    """Quando passada uma URL com o parâmetro 'descricao', deve ser retornada apenas a receitas que atenda a esse parâmetro de pesquisa."""
+    descricao = 'Descrição para teste'
+    resposta = self.client.get(self.lista_url + f'?descricao={descricao}')
+    lista_receitas = resposta.json()
+    
+    for receita in lista_receitas:
+      self.assertEqual(receita['descricao'], descricao)
+
+  def test_faz_uma_requisicao_com_o_parametro_mes_e_ano(self):
+    """Quando são passados os parâmetros mês e ano usando o método GET, deve ser retornada uma lista de receitas"""
+    mes = '{:02d}'.format(self.receita.data.month)
+    ano = self.receita.data.year
+
+    resposta = self.client.get(self.lista_url + f'{mes}/{ano}/')
+    lista_receitas = resposta.json()
+
+    for receita in lista_receitas:
+      data = receita['data']
+      self.assertEqual(data[3:5], str(mes))
+      self.assertEqual(data[6:10], str(ano))
+  
+  def gerar_instancia(self):
+    """
+    Retorna um dicionário com os dados a serem enviados na requisição POST.
+    """
+    data = timezone.now()
+    self.receita = Receita.objects.create( 
+      descricao='Descrição para teste',
+      valor=1000.00,
+      data=data
+  )
+    return self.receita
 

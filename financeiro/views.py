@@ -144,7 +144,7 @@ class ReceitaListView(BaseView, generics.ListAPIView):
             data__month=mes,
             data__year=ano
         )
-    return Receita.objects.none()
+    return self.queryset
 
 def get_list_serializers(model):
    """Retorna a lista de serializers de acordo com o modelo passado"""
