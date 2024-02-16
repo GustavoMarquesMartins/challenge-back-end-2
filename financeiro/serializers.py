@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from .models import *
 from .validators import *
 
@@ -40,3 +41,21 @@ class DespesaSerializerV2(BaseTransacaoSerializer):
         """Configurações do serializer."""
         model = Despesa
         fields = ['id','descricao', 'valor', 'data','categoria']
+
+from rest_framework import serializers
+
+class ResumoSerializer(serializers.Serializer):
+    valor_total_receitas = serializers.DecimalField(max_digits=8, decimal_places=2)
+    valor_total_despesas = serializers.DecimalField(max_digits=8, decimal_places=2)
+    saldo_final_do_mes = serializers.DecimalField(max_digits=8, decimal_places=2)
+    valor_gasto_no_mes_por_categoria = serializers.SerializerMethodField()
+
+    def get_valor_gasto_no_mes_por_categoria(self, obj):
+        return obj['valor_gasto_no_mes_por_categoria']
+
+    class Meta:
+        read_only_fields = ('valor_total_receitas', 
+                            'valor_total_despesas',
+                              'saldo_final_do_mes',
+                                'valor_gasto_no_mes_por_categoria')
+
