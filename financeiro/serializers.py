@@ -3,6 +3,8 @@ from rest_framework import serializers
 from .models import *
 from .validators import *
 
+import json
+
 class BaseTransacaoSerializer(serializers.ModelSerializer):
     """Base para ReceitaSerializer e DespesaSerializer."""
 
@@ -42,20 +44,53 @@ class DespesaSerializerV2(BaseTransacaoSerializer):
         model = Despesa
         fields = ['id','descricao', 'valor', 'data','categoria']
 
-from rest_framework import serializers
+class ResumoSerializer(serializers.ModelSerializer):
 
-class ResumoSerializer(serializers.Serializer):
-    valor_total_receitas = serializers.DecimalField(max_digits=8, decimal_places=2)
-    valor_total_despesas = serializers.DecimalField(max_digits=8, decimal_places=2)
-    saldo_final_do_mes = serializers.DecimalField(max_digits=8, decimal_places=2)
-    valor_gasto_no_mes_por_categoria = serializers.SerializerMethodField()
+    data = serializers.SerializerMethodField(method_name='get_data')
 
-    def get_valor_gasto_no_mes_por_categoria(self, obj):
-        return obj['valor_gasto_no_mes_por_categoria']
+    def to_representation(self, obj):
+        """
+        Sobrescreve o método padrão para adicionar um campo personalizado à representação.
+        O campo 'valor_gasto_por_categoria' é deserializado de uma string JSON para um dicionário e adicionado à representação.
+        """
 
+        # Obter a representação padrão do serializer
+        representation = super().to_representation(obj)
+        
+        # Converte o campo valor_gasto_por_categoria do obj para um dicionario
+        valor_gasto_por_categoria = json.loads(obj.valor_gasto_por_categoria)
+
+        # Adicionar o campo personalizado da representação
+        representation['valor_gasto_por_categoria'] = valor_gasto_por_categoria
+        
+        return representation
+    
+    def to_internal_value(self, data):
+        """
+        Verifica se 'valor_gasto_por_categoria' está presente nos dados que estão sendo desserializados.
+        Se estiver presente, o valor é transformado em uma representação string para que o método json.dumps() possa serializar os dados.
+        """
+        # Verifique se 'valor_por_categoria' está presente nos dados que estão sendo desserializados
+        if 'valor_gasto_por_categoria' in data:
+            
+            # Caso esteja presente, ele é armazenado na variável valor_gasto_por_categoria
+            valor_gasto_por_categoria = data['valor_gasto_por_categoria']  
+            
+            # Cada valor gasto por categoria é transformado em uma representação string
+            # para que o método json.dumps() possa serializar os dados
+            for categoria, valor in valor_gasto_por_categoria.items():
+                valor_gasto_por_categoria[categoria] = str(valor)
+
+            # Após o valor das chaves do dicionário ser convertido para string, o dicionário pode ser serializado
+            data['valor_gasto_por_categoria'] = json.dumps(valor_gasto_por_categoria)
+
+        # Chame o método pai para continuar com a desserialização padrão
+        return super().to_internal_value(data)
+
+    def get_data(self, obj):
+        return obj.data.strftime('%d/%m/%Y')    
+    
     class Meta:
-        read_only_fields = ('valor_total_receitas', 
-                            'valor_total_despesas',
-                              'saldo_final_do_mes',
-                                'valor_gasto_no_mes_por_categoria')
+        model = Resumo
+        fields = '__all__'
 

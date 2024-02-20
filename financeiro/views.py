@@ -182,21 +182,9 @@ class ResumoListView(generics.ListAPIView):
     ano = self.kwargs.get('ano')
 
     resumo = ResumoDoMesService(mes=mes, ano=ano)
-    
-    print( resumo.saldo_final_do_mes_por_categoria())
-    print( resumo.saldo_final_do_mes_por_categoria())
-    print( resumo.saldo_final_do_mes_por_categoria())
-    print( resumo.saldo_final_do_mes_por_categoria())
-    print( resumo.saldo_final_do_mes_por_categoria())
-    print( resumo.saldo_final_do_mes_por_categoria())
+    serializer = resumo.gerar_resumo()
 
-    dicionario = {'valor_total_receitas': resumo.valor_total_receitas_no_mes(),
-                  'valor_total_despesas': resumo.valor_total_despesas_no_mes(),
-                  'saldo_final_do_mes': resumo.saldo_final_do_mes(),
-                  'valor_gasto_no_mes_por_categoria': resumo.saldo_final_do_mes_por_categoria()}
-    print(dicionario)
-    serializer_class = ResumoSerializer(dicionario)
-    return Response(serializer_class.data, status.HTTP_200_OK)
+    return Response(serializer.data, status.HTTP_200_OK)
 
 def get_list_serializers(model):
    """Retorna a lista de serializers de acordo com o modelo passado"""
