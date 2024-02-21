@@ -1,5 +1,6 @@
 from financeiro.models import *
 from financeiro.serializers import *
+from rest_framework.exceptions import ValidationError
 
 import json
 
@@ -64,21 +65,43 @@ class ResumoDoMesService():
 
   def gerar_resumo(self):
     """Verifica se existe um resumo para determinado mês; se sim, ele é retornado. Caso contrário, um é gerado para o mês solicitado."""
-    resumo = Resumo.objects.filter(
+    self.resumo = Resumo.objects.filter(
       data__month = self.mes,
       data__year = self.ano
     ).first()
 
-    if not resumo:
-      resumo = {'valor_total_receitas': self.valor_total_receitas_no_mes(),
+    if not self.resumo:
+      return self.criar_resumo()
+    if self.resumo.valor_total_despesas != self.valor_total_despesas_no_mes():
+      return self.atualizar_resumo()
+    
+    return ResumoSerializer(self.resumo)
+  
+  def criar_resumo(self):
+    """Cria uma instância de resumo no banco de dados."""
+    resumo = {'valor_total_receitas': self.valor_total_receitas_no_mes(),
+              'valor_total_despesas': self.valor_total_despesas_no_mes(),
+              'saldo_final': self.saldo_final_do_mes(),
+              'valor_gasto_por_categoria': self.saldo_final_do_mes_por_categoria()
+              }
+    serializer = ResumoSerializer(data=resumo)
+    if serializer.is_valid():
+      serializer.save()
+      return serializer
+    raise ValidationError(serializer.erors)
+  
+  def atualizar_resumo(self):
+    """Atualiza uma instância de resumo no banco de dados."""
+    data =  {'valor_total_receitas': self.valor_total_receitas_no_mes(),
                 'valor_total_despesas': self.valor_total_despesas_no_mes(),
                 'saldo_final': self.saldo_final_do_mes(),
                 'valor_gasto_por_categoria': self.saldo_final_do_mes_por_categoria()
-                }
-      serializer = ResumoSerializer(data=resumo)
-      if serializer.is_valid():
-        serializer.save()
-        return serializer
-      
-    return ResumoSerializer(resumo)
-      
+              }
+    serializer = ResumoSerializer(self.resumo, data, partial=True)
+    if serializer.is_valid():
+      serializer.save()
+      return serializer
+    raise ValidationError(serializer.erors)
+    
+
+    
