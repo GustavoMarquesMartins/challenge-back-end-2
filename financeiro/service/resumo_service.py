@@ -71,10 +71,12 @@ class ResumoDoMesService():
     ).first()
 
     if not self.resumo:
+      """Cria resumo caso não exista um para determinado mês e ano"""
       return self.criar_resumo()
-    if self.resumo.valor_total_despesas != self.valor_total_despesas_no_mes():
+    if self.resumo.saldo_final != self.saldo_final_do_mes():
+      """Caso o resumo esteja desatualizado ele e atualizado"""
       return self.atualizar_resumo()
-    
+    """Retorna o resumo se não houver necessidade de alterações"""
     return ResumoSerializer(self.resumo)
   
   def criar_resumo(self):
