@@ -181,34 +181,38 @@ class ResumoListView(generics.ListAPIView):
   serializers_class = ResumoMensalSerializer
   
   def get(self, request, *args, **kwargs):
-    mes = self.kwargs.get('mes')
-    ano = self.kwargs.get('ano')
+    self.mes = self.kwargs.get('mes')
+    self.ano = self.kwargs.get('ano')
 
-    hoje = datetime.today()
-    primeiro_dia_do_mes = hoje.replace(day=1)
-    proximo_mes = hoje.replace(month=hoje.month + 1)
-    ultimo_dia_do_mes = proximo_mes - timedelta(days=1)
-    
-    total_receitas = Receita.objects.filter(data__range=(primeiro_dia_do_mes, ultimo_dia_do_mes)) \
-                                      .aggregate(total_receitas=Sum('valor'))['total_receitas'] or 0
-
-    total_despesas = Despesa.objects.filter(data__range=(primeiro_dia_do_mes, ultimo_dia_do_mes)) \
+    data = {
+        'total_receitas': self.total_receitas(),
+        'total_despesas': self.total_despesas(),
+        'saldo_final': self.saldo_final(),
+        'despesas_por_categoria': list(self.despesas_por_categoria())
+    }
+    return Response(data)
+  
+  def total_receitas(self):
+    """Retorna o valor total de receitas por categoria para o mês e ano especificados"""
+    return Receita.objects.filter(data__month = self.mes, 
+                                      data__year = self.ano) \
+                                .aggregate(total_receitas=Sum('valor'))['total_receitas'] or 0
+  def total_despesas(self):
+    """Retorna o valor total de despesas para o mês e ano especificados"""
+    return Despesa.objects.filter(data__month = self.mes, 
+                                            data__year = self.ano) \
                                       .aggregate(total_despesas=Sum('valor'))['total_despesas'] or 0
-
-    saldo_final = total_receitas - total_despesas
-
-    despesas_por_categoria = Despesa.objects.filter(data__range=(primeiro_dia_do_mes, ultimo_dia_do_mes)) \
+  def saldo_final(self):
+    """Retorna o saldo final para mês e ano especificados"""
+    return self.total_receitas() - self.total_despesas()
+  
+  def despesas_por_categoria(self):
+    """Retorna o valor total de despesas por categoria para o mês e ano especificados"""
+    return Despesa.objects.filter(data__month = self.mes, 
+                                            data__year = self.ano) \
                                               .values('categoria') \
                                               .annotate(total_gasto=Sum('valor'))
-    data = {
-        'total_receitas': total_receitas,
-        'total_despesas': total_despesas,
-        'saldo_final': saldo_final,
-        'despesas_por_categoria': list(despesas_por_categoria)  # Converte QuerySet para lista
-    }
-
-    return Response(data)
-
+     
 def get_list_serializers(model):
    """Retorna a lista de serializers de acordo com o modelo passado"""
    if model:
