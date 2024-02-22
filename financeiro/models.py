@@ -27,15 +27,5 @@ class Despesa(models.Model):
         """Retorna uma representação em string da descrição do objeto"""
         return f'Descrição da despesa: {self.descricao}'
 
-class Resumo(models.Model):
-    """
-    Modelo para registros de resumo mensal.
-    """
-    valor_total_receitas = models.DecimalField(max_digits=8, decimal_places=2, null=False)
-    valor_total_despesas = models.DecimalField(max_digits=8, decimal_places=2, null=False)
-    saldo_final =  models.DecimalField(max_digits=8, decimal_places=2, null=False)
-    valor_gasto_por_categoria = models.TextField()
-    data = models.DateTimeField(default=timezone.now, null=False, blank=False)
-
 
 

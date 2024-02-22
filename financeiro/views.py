@@ -3,10 +3,11 @@ from rest_framework import status
 from rest_framework.response import Response
 import re
 from rest_framework import generics
+from django.db.models import Sum
+
 
 from .models import *
 from .serializers import *
-from .service.resumo_service import *
 
 class BaseView():
   """
@@ -176,15 +177,37 @@ class DespesaListView(BaseView, generics.ListAPIView):
     return self.queryset
 
 class ResumoListView(generics.ListAPIView):
+
+  serializers_class = ResumoMensalSerializer
   
   def get(self, request, *args, **kwargs):
     mes = self.kwargs.get('mes')
     ano = self.kwargs.get('ano')
 
-    resumo = ResumoDoMesService(mes=mes, ano=ano)
-    serializer = resumo.gerar_resumo()
+    hoje = datetime.today()
+    primeiro_dia_do_mes = hoje.replace(day=1)
+    proximo_mes = hoje.replace(month=hoje.month + 1)
+    ultimo_dia_do_mes = proximo_mes - timedelta(days=1)
+    
+    total_receitas = Receita.objects.filter(data__range=(primeiro_dia_do_mes, ultimo_dia_do_mes)) \
+                                      .aggregate(total_receitas=Sum('valor'))['total_receitas'] or 0
 
-    return Response(serializer.data, status.HTTP_200_OK)
+    total_despesas = Despesa.objects.filter(data__range=(primeiro_dia_do_mes, ultimo_dia_do_mes)) \
+                                      .aggregate(total_despesas=Sum('valor'))['total_despesas'] or 0
+
+    saldo_final = total_receitas - total_despesas
+
+    despesas_por_categoria = Despesa.objects.filter(data__range=(primeiro_dia_do_mes, ultimo_dia_do_mes)) \
+                                              .values('categoria') \
+                                              .annotate(total_gasto=Sum('valor'))
+    data = {
+        'total_receitas': total_receitas,
+        'total_despesas': total_despesas,
+        'saldo_final': saldo_final,
+        'despesas_por_categoria': list(despesas_por_categoria)  # Converte QuerySet para lista
+    }
+
+    return Response(data)
 
 def get_list_serializers(model):
    """Retorna a lista de serializers de acordo com o modelo passado"""

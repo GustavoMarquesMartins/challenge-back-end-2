@@ -16,5 +16,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('receitas/<int:ano>/<int:mes>/', ReceitaListView.as_view(), name='receitas_por_ano_mes'),
     path('despesas/<int:ano>/<int:mes>/', DespesaListView.as_view(), name='despesas_por_ano_mes'),
-    path('resumo/<int:ano>/<int:mes>/', ResumoListView.as_view(), name='resumo_por_ano_mes'),
+    path('resumo/', ResumoListView.as_view(), name='resumo_por_ano_mes'),
 ]
