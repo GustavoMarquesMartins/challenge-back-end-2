@@ -188,7 +188,7 @@ class ResumoListView(generics.ListAPIView):
         'total_receitas': self.total_receitas(),
         'total_despesas': self.total_despesas(),
         'saldo_final': self.saldo_final(),
-        'despesas_por_categoria': list(self.despesas_por_categoria())
+        'despesa_por_categoria': list(self.despesas_por_categoria())
     }
     return Response(data)
   
@@ -211,7 +211,7 @@ class ResumoListView(generics.ListAPIView):
     return Despesa.objects.filter(data__month = self.mes, 
                                             data__year = self.ano) \
                                               .values('categoria') \
-                                              .annotate(total_gasto=Sum('valor'))
+                                              .annotate(valor=Sum('valor'))
      
 def get_list_serializers(model):
    """Retorna a lista de serializers de acordo com o modelo passado"""

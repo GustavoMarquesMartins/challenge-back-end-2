@@ -19,7 +19,7 @@ class ReceitaValidatorsTestCase(APITestCase):
     self.assertEqual(resposta.status_code, status.HTTP_201_CREATED)
 
   def test_criar_uma_receita_com_a_mesma_descricao_de_uma_receita_criada_a_menos_de_30_dias_atras(self):
-    """Verifica se é possível criar uma nova receita com uma descrição idêntica à de uma receita criada a menos de 30 dias atrás."""
+    """Verifica se é possível criar umaa nova receita com uma descrição idêntica à de uma receita criada a menos de 30 dias atrás."""
     resposta = self.client.post(self.lista_url, data=self.data_receita_menos_de_30_dias())
     self.assertEqual(resposta.status_code, status.HTTP_400_BAD_REQUEST)
 
