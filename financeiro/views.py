@@ -4,6 +4,13 @@ from rest_framework.response import Response
 import re
 from rest_framework import generics
 from django.db.models import Sum
+from rest_framework.permissions import AllowAny
+from rest_framework.generics import CreateAPIView
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
+from rest_framework_simplejwt.tokens import RefreshToken
+
+
 
 
 from .models import *
@@ -221,3 +228,33 @@ def get_list_serializers(model):
     if model == Despesa:
       return [DespesaSerializer,DespesaSerializerV2]
     return None
+    
+class Cadastro(CreateAPIView):
+  """Cadastra um usuário"""
+  serializer_class  = UsuarioSerializer
+  permission_classes = [AllowAny]
+  
+class Login(CreateAPIView):
+  """Gera um token de acesso para usuários cadastrados no sistema"""
+  serializer_class  = UsuarioSerializer
+  permission_classes = [AllowAny]
+
+  def post(self, request):
+    username = request.data['username']
+    password = request.data['password']
+
+    usuario = authenticate(username = username, password = password)
+    if usuario:
+      refresh = RefreshToken.for_user(usuario)
+      return Response({
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            }, status=status.HTTP_200_OK)
+    else:
+        return Response({'error': 'Credenciais inválidas'},
+                         status=status.HTTP_401_UNAUTHORIZED)
+
+    
+
+  
+  
