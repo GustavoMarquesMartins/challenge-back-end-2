@@ -3,13 +3,14 @@ from financeiro.models import Receita
 from datetime import datetime, timedelta
 from django.urls import reverse
 from rest_framework import status
-import pytz
+from .base_test.base_test import BaseTest
 
-class ReceitaValidatorsTestCase(APITestCase):
+class ReceitaValidatorsTestCase(BaseTest, APITestCase):
   """Testes para validadores de Receita."""
 
   def setUp(self):
     """Configura o ambiente antes de cada teste."""
+    super().setUp()
     self.cenario_de_teste()
     self.lista_url = reverse('receitas-list')
 
@@ -35,7 +36,7 @@ class ReceitaValidatorsTestCase(APITestCase):
 
   def cenario_de_teste(self): 
     """Cria uma instância de Receita no banco de dados."""
-    data_atual = datetime.now(tz=pytz.timezone('America/Sao_Paulo'))
+    data_atual = datetime.now()
     data_30_dias_atras = data_atual - timedelta(days=30)
     
     Receita.objects.create(

@@ -5,7 +5,7 @@ from .validators import *
 
 from django.contrib.auth.models import User
 
-class BaseTransacaoSerializer(serializers.ModelSerializer):
+class BaseFinanceiroSerializer(serializers.ModelSerializer):
     """Base para ReceitaSerializer e DespesaSerializer."""
 
     data = serializers.SerializerMethodField(method_name='get_data_formatada')
@@ -20,7 +20,7 @@ class BaseTransacaoSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({'descricao': 'Descrição não pode ser duplicada por 1 mês'})
         return data
 
-class ReceitaSerializer(BaseTransacaoSerializer):
+class ReceitaSerializer(BaseFinanceiroSerializer):
     """Serializer para Receita."""
 
     class Meta:
@@ -28,7 +28,7 @@ class ReceitaSerializer(BaseTransacaoSerializer):
         model = Receita
         fields = ['id','descricao', 'valor', 'data']
 
-class DespesaSerializer(BaseTransacaoSerializer):
+class DespesaSerializer(BaseFinanceiroSerializer):
     """Serializer para Despesa."""
 
     class Meta:
@@ -36,7 +36,7 @@ class DespesaSerializer(BaseTransacaoSerializer):
         model = Despesa
         fields = ['id','descricao', 'valor', 'data']
 
-class DespesaSerializerV2(BaseTransacaoSerializer):
+class DespesaSerializerV2(BaseFinanceiroSerializer):
     """Serializer para Despesa."""
 
     class Meta:
@@ -45,13 +45,21 @@ class DespesaSerializerV2(BaseTransacaoSerializer):
         fields = ['id','descricao', 'valor', 'data','categoria']
 
 class ResumoMensalSerializer(serializers.Serializer):
-    """Serializar para resumos mensais"""
+    """
+    Serializer para resumos mensais.
+    Este serializador é usado para representar resumos mensais de finanças.
+    """
     total_receitas = serializers.DecimalField(max_digits=10, decimal_places=2)
     total_despesas = serializers.DecimalField(max_digits=10, decimal_places=2)
     saldo_final = serializers.DecimalField(max_digits=10, decimal_places=2)
     despesas_por_categoria = serializers.DictField(child=serializers.DecimalField(max_digits=10, decimal_places=2))
 
 class UsuarioSerializer(serializers.ModelSerializer):
+    """
+    Serializer para usuários.
+    Este serializador é usado para representar dados de usuário, como id, nome de usuário e email.
+    O campo de senha é protegido e não é retornado nas respostas da API.
+    """
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'password']

@@ -38,8 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Adicionais
+    # Libs
     'rest_framework', 
+    "admin_honeypot",
+
     # Meus apps
     'financeiro',
 ]
@@ -116,7 +118,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -124,15 +126,19 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-REST_FRAMEWORK  = {
-   # Define como a versão da API será identificada nas URLs, permitindo múltiplas versões da API.
+REST_FRAMEWORK = {
+    # Configuração de versionamento da API
     'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.QueryParameterVersioning',
-
+    
+    # Configuração de autenticação
+    # Define as classes padrão para autenticação na API.
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     
+    # Configuração de permissões
+    # Define as classes padrão para permissão de usuário na API.
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
-}   
+}

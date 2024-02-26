@@ -7,7 +7,7 @@ def descricao_valida(model, descricao):
   objetos = model.objects.filter(descricao=descricao)
   if objetos:
     for objeto in objetos:
-      data_atual = datetime.now(pytz.timezone('America/Sao_Paulo'))
+      data_atual = datetime.now()
       intervalo = data_atual - objeto.data  
       if intervalo.days < 30:
         return False
