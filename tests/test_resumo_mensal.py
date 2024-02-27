@@ -1,12 +1,10 @@
-from django.test import TestCase
+from rest_framework.test import APITestCase
 from financeiro.models import *
 from django.db.models import Sum
-from .base_test.base_test import BaseTest
+from .base_test.base_test import TestBaseClass
 from django.urls import reverse
 
-class ResumoMensalTestCase(BaseTest, TestCase):
-
-  fixtures = ['receitas_iniciais', 'despesas_iniciais']
+class ResumoMensalTestCase(TestBaseClass, APITestCase):
 
   def setUp(self):
     """Configura o ambiente antes de cada teste."""

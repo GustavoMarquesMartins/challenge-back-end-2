@@ -1,16 +1,10 @@
 from rest_framework.test import APITestCase
 from rest_framework import status
-from django.test import TestCase
-from .base_test.base_test import BaseTest
+from .base_test.base_test import TestBaseClass
 from django.urls import reverse
 
-class DespesaAPITestCase(BaseTest, APITestCase):
-  """
-  Classe de teste para verificar o retorno esperado de cada endpoint da API.
+class DespesaAPITestCase(TestBaseClass, APITestCase):
 
-  Esta classe contém métodos de teste que verificam se os endpoints da API estão retornando os códigos de status HTTP esperados,
-  assim como os dados corretos. Os testes incluem requisições GET, POST, PUT e DELETE para diferentes recursos da API.
-  """
   def setUp(self):
     super().setUp()
     self.lista_url = reverse('despesas-list')
@@ -58,17 +52,6 @@ class DespesaAPITestCase(BaseTest, APITestCase):
         'valor':  23.00
     }
   
-class DespesaTestCase(BaseTest, TestCase):
-  """
-  Classe de teste para verificar o retorno esperado dos recursos de listagem de despesas por ano e mês ou por descrição.
-
-  Esta classe contém métodos de teste que verificam se os endpoints da API estão retornando os códigos de status HTTP esperados,
-  assim como os dados corretos. Os testes incluem requisições GET para recursos de listagem por ano e mês ou descrição.
-  """
-  def setUp(self):
-    super().setUp()
-    self.lista_url = reverse('despesas-list')
-
   def test_faz_uma_requisicao_com_o_parametro_descricao(self):
     """
     Quando passada uma URL com o parâmetro 'descricao', deve ser retornada apenas as despesas que atendam a esse parâmetro de pesquisa.

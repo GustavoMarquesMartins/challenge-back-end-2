@@ -2,10 +2,10 @@ from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.test import APIClient
 
-class BaseTest():
-  """Classe de teste base para todos os testes relacionados ao recurso de despesas"""
-  fixtures = ['despesas_iniciais','receitas_iniciais']
-
+class TestBaseClass():
+  
+  fixtures = ['receitas_iniciais', 'despesas_iniciais']
+  
   def setUp(self):
     """Configuração inicial antes de cada teste."""
     

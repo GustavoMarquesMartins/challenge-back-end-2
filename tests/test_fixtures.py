@@ -1,10 +1,8 @@
-from django.test import TestCase
-
+from rest_framework.test import APITestCase
 from financeiro.models import Receita
+from .base_test.base_test import TestBaseClass
 
-class FixtureDataTestCase(TestCase):
-
-  fixtures = ['receitas_iniciais']
+class FixtureDataTestCase(TestBaseClass, APITestCase):
 
   def test_que_verifica_carregamento_das_fixtures(self):
     """Verifica carregamento da fixture para o banco de dados de teste"""

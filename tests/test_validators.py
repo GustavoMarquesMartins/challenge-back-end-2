@@ -3,11 +3,10 @@ from financeiro.models import Receita
 from datetime import datetime, timedelta
 from django.urls import reverse
 from rest_framework import status
-from .base_test.base_test import BaseTest
+from .base_test.base_test import TestBaseClass
 
-class ReceitaValidatorsTestCase(BaseTest, APITestCase):
-  """Testes para validadores de Receita."""
-
+class ReceitaValidatorsTestCase(TestBaseClass, APITestCase):
+    
   def setUp(self):
     """Configura o ambiente antes de cada teste."""
     super().setUp()
