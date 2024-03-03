@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Libs
     'rest_framework', 
-    "admin_honeypot",
+    'admin_honeypot',
+    'drf_yasg',
 
     # Meus apps
     'financeiro',
@@ -150,3 +151,21 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
 
+# # Configuração de paginação
+# REST_FRAMEWORK = {
+#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+#     'PAGE_SIZE': 10
+# }
+
+# Configurações do Swagger
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': False,
+    # Usuário pode ser autenticado diretamente pelo UI do Swagger usando tokens JWT
+    'SECURITY_DEFINITIONS': {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}
