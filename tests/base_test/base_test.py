@@ -10,7 +10,7 @@ class TestBaseClass():
     """Configuração inicial antes de cada teste."""
     
     # Cria um usuário
-    self.user = User.objects.create_user(username='c3po', password='123456')
+    self.user = User.objects.create_superuser(username='c3po', password='123456')
 
     # Gera um token JWT para o usuário
     self.refresh = RefreshToken.for_user(self.user)

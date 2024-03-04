@@ -6,6 +6,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.generics import CreateAPIView
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.views import APIView
 
 from .models import *
 from .serializers import *
@@ -29,9 +30,10 @@ class DespesaListView(BaseListAPIView):
   """View para listar despesas com base no mês e ano solicitados"""
   queryset = Despesa.objects.all()
 
-class ResumoListView(generics.GenericAPIView):
+class ResumoListView(APIView):
   """Retorna um resumo mensal"""
   serializers_class = ResumoMensalSerializer
+  queryset = Receita.objects.all()
   
   def get(self, *args, **kwargs):
     self.mes = self.kwargs.get('mes')
@@ -43,7 +45,7 @@ class ResumoListView(generics.GenericAPIView):
         'saldo_final': self.saldo_final(),
         'despesa_por_categoria': list(self.despesas_por_categoria())
     }
-    return Response(data)
+    return Response(data, status.HTTP_200_OK)
   
   def total_receitas(self):
     """Retorna o valor total de receitas por categoria para o mês e ano especificados"""

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +22,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'q5j=@k7whbnrjqyv9un7c)9yqlo!1@8$418rt*$)@az-_4vc5p'
+SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# Lista de hosts/domínios que têm permissão para acessar esta API.
+ALLOWED_HOSTS = ['localhost', '127.0.0.1'] 
 
 
 # Application definition
@@ -40,22 +42,26 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Libs
-    'rest_framework', 
-    'admin_honeypot',
-    'drf_yasg',
-
+    'rest_framework', # Biblioteca para construir APIs RESTful em Django.
+    'admin_honeypot', # Adiciona um campo de entrada falsa no login do Django Admin para prevenir ataques de força bruta.
+    'drf_yasg', # Gera documentação de API automaticamente a partir do código Django Rest Framework.
+    'corsheaders', # Permite que o servidor Django aceite solicitações de origens diferentes, resolvendo problemas de CORS.
+    'django_filters', # suporte a filtros
+    
     # Meus apps
     'financeiro',
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.security.SecurityMiddleware', # Adiciona várias configurações de segurança HTTP.
+    'django.contrib.sessions.middleware.SessionMiddleware', # Gerencia sessões de usuário.
+    "corsheaders.middleware.CorsMiddleware", # Permite o controle de acesso de origem cruzada (CORS).
+    'django.middleware.common.CommonMiddleware', # Fornece funcionalidades comuns, como acesso a variáveis de contexto.
+    'django.middleware.csrf.CsrfViewMiddleware', # Protege contra ataques CSRF.
+    'django.contrib.auth.middleware.AuthenticationMiddleware', # Autentica usuários.
+    'django.contrib.messages.middleware.MessageMiddleware', # Gerencia mensagens de feedback para o usuário.
+    'django.middleware.clickjacking.XFrameOptionsMiddleware', # Protege contra ataques de clickjacking.
+    'django.middleware.locale.LocaleMiddleware', # Permite a seleção de idiomas.
 ]
 
 ROOT_URLCONF = 'setup.urls'
@@ -129,20 +135,37 @@ USE_TZ = False
 STATIC_URL = '/static/'
 
 REST_FRAMEWORK = {
-    # Configuração de versionamento da API
-    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.QueryParameterVersioning',
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.QueryParameterVersioning', # Define a classe de versionamento da API.
     
-    # Configuração de autenticação
-    # Define as classes padrão para autenticação na API.
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication', # Define o tipo de autenticação usando tokens JWT.
     ],
     
-    # Configuração de permissões
-    # Define as classes padrão para permissão de usuário na API.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticated', # Garante que apenas usuários autenticados possam acessar a API.
+        'rest_framework.permissions.DjangoModelPermissions', # Aplica permissões baseadas no modelo Django para controlar o acesso aos recursos da API.
     ],
+
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle', # Limita o número de requisições que usuários anônimos podem fazer em um determinado período.
+    ],
+
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '100/day', # Define a taxa máxima de requisições para usuários anônimos.
+        'user': '1000/day', # Define a taxa máxima de requisições para usuários autenticados.
+    },
+
+    # (Desativado) Configura as classes de parser da API, que interpretam os dados das requisições.
+    # 'DEFAULT_PARSER_CLASSES': [
+    #     'rest_framework.parsers.JSONParser', # Interpreta dados em formato JSON
+    #     'rest_framework_xml.parsers.XMLParser', # Interpreta dados em formato XML
+    # ],
+    
+    # (Desativado) Configura as classes de renderização da API, que formatam os dados das respostas.
+    # 'DEFAULT_RENDERER_CLASSES': [
+    #     'rest_framework.renderers.JSONRenderer', # Formata respostas em JSON
+    #     'rest_framework_xml.renderers.XMLRenderer' # Formata respostas em XML
+    # ],
 }
 
 # Tempo de vida do token de acesso (access token)
@@ -150,12 +173,6 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=4),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
-
-# # Configuração de paginação
-# REST_FRAMEWORK = {
-#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-#     'PAGE_SIZE': 10
-# }
 
 # Configurações do Swagger
 SWAGGER_SETTINGS = {
@@ -169,3 +186,30 @@ SWAGGER_SETTINGS = {
         }
     }
 }
+
+# # Configura as origens permitidas para requisições CORS, permitindo que a API seja acessada de diferentes domínios.
+# CORS_ALLOWED_ORIGINS = [
+#     "", # Permite requisições do localhost na porta 3000
+# ]
+
+# (Desativado) Configura o uso do Redis como sistema de cache para melhorar o desempenho da API.
+# 'CACHES': {
+#     "default": {
+#         "BACKEND": "django_redis.cache.RedisCache", # Usa Redis como backend de cache
+#         "LOCATION": "redis://localhost:6379/1", # Endereço do servidor Redis
+#         "OPTIONS": {
+#             "CLIENT_CLASS": "django_redis.client.DefaultClient", # Classe do cliente Redis
+#         }
+#     }
+# }
+
+# # Define o mecanismo de armazenamento de sessões para usar o cache, o que pode melhorar a performance e a escalabilidade.
+# SESSION_ENGINE = "django.contrib.sessions.backends.cache" # Usa o cache para armazenar sessões
+
+# # Especifica o alias do cache a ser utilizado pelo mecanismo de sessões, garantindo que as sessões sejam armazenadas no cache correto.
+# SESSION_CACHE_ALIAS = "default" # Usa o cache padrão para armazenar sessões
+
+# # Define o caminho para arquivos de localização (internacionalização), que contêm strings traduzidas para diferentes idiomas.
+# LOCALE_PATHS = (
+#  os.path.join(BASE_DIR, 'locale/'), # Caminho para pasta de arquivos de localização
+# )
